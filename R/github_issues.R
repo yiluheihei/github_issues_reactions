@@ -1,26 +1,20 @@
 #' List issues for a repository.
-#' @param repo, character, in the format `username/repo`
-#' @param ..., parameters, more details in 
+#' @param repo character, in the format `username/repo`
+#' @param pull_request every pull request is an issue, and we discard the pull 
+#' request by default.
+#' @param per_page set the page size to the maximum 100 for auto pagination
+#' @param ..., Name-value pairs giving repository issues parameters, 
+#' e.g. `state`, more details in 
 #' [https://developer.github.com/v3/issues/#list-issues-for-a-repository](https://developer.github.com/v3/issues/#list-issues-for-a-repository)
-#' @details NB:  more details in
-#' [https://developer.github.com/v3/#pagination](https://developer.github.com/v3/#pagination)
-#' @return a list, an element represents the content of an issue 
+#' @return an issue list, an element represents the content of an issue 
 
-github_repo_issues <- function(repo, ...) {
+github_repo_issues <- function(repo, pull_request = FALSE, per_page = 100, ...) {
   path <- file.path("repos", repo, "issues")
-  resp <- github_GET(path, ...)
-  # parsed <- github_parse(resp)
-  # 
-  # if (!length(parsed))
-  #   return(NULL)
-  # 
-  # while (has_next_link(resp)) {
-  #   resp <- github_next_page(resp)
-  #   parsed <- append(parsed, github_parse(resp))
-  # }
+  resp <- github_GET(path, per_page = per_page, ...)
   parsed <- github_pagination(resp)
   
-  parsed
+  # discard pull request
+  purrr::discard(parsed, ~ is.element("pull_request", names(.x)))
 }
 
 get_issues_item <- function(issues, item) {
@@ -32,18 +26,9 @@ get_issues_item <- function(issues, item) {
 
 
 #' List comments of an issue
-github_issue_comments <- function(repo, issue_number, ...) {
+github_issue_comments <- function(repo, issue_number, per_page = 100) {
   path <- file.path("repos", repo, "issues", issue_number, "comments")
-  resp <- github_GET(path, ...) 
-  # parsed <- github_parse(resp)
-  # 
-  # if (!length(parsed))
-  #   return(NULL)
-  # 
-  # while (has_next_link(resp)) {
-  #   resp <- github_next_page(resp)
-  #   parsed <- append(parsed, github_parse(resp))
-  # }
+  resp <- github_GET(path, per_page = per_page) 
   parsed <- github_pagination(resp)
 
   parsed
