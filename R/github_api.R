@@ -1,21 +1,32 @@
 #' github api GET method
 #' 
 #' @param path character, url path
+#' @param headers which can be used to provide a custom media type, for accessing a
+#'   preview feature of the API, e.g. reactions.
 #' @param access_token character, your personal access token which was used to 
 #' increasing the unauthenticated rate limit for OAuth
 #' @param ... github api parameters
-
-github_GET <- function(path, ..., access_token = github_pat()) {
+github_GET <- function(path, headers = NULL, ..., access_token = github_pat()) {
   host <- "https://api.github.com"
+  params <- list(access_token = access_token, ...)
   # resp <- httr::GET(host, path = path, ..., access_token = access_token)
-  resp <- httr::GET(host, path = path, 
-    httr::add_headers(Authorization = paste("token", access_token)),
-    ...
-  )
+  resp <- httr::GET(host, path = path,  httr::add_headers(headers), query = params)
   github_errors(resp)
   
   return(resp)
 }
+
+
+
+# github_GET <- function(path, ..., access_token = github_pat()) {
+#   host <- "https://api.github.com"
+#   params <- list(access_token = access_token, ...)
+#   # resp <- httr::GET(host, path = path, ..., access_token = access_token)
+#   resp <- httr::GET(host, path = path, query = params)
+#   github_errors(resp)
+#   
+#   return(resp)
+# }
 
 # authorize and rate limit ------------------------------------------------
 
