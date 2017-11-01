@@ -33,8 +33,10 @@ github_GET <- function(path, headers = NULL, ..., access_token = github_pat()) {
 #' Github personal access token (PAT), OAuth2 Token, which can be used to 
 #' authenticate to the API.
 #' 
-#' You can [create your own pat](https://github.com/settings/tokens/new) for 
-#' increasing the unauthenticated rate limit for OAuth.
+#' As a default, GitHub only allows 60 API calls per hour for anonymous users. 
+#' For authenticated users, GitHub only allows 5000 API calls per hour.
+#' So, we can [create the pat](https://github.com/settings/tokens/new) for 
+#' increasing the unauthenticated rate limit.
 github_pat <- function() {
   pat <- Sys.getenv('GITHUB_PAT')
   if (identical(pat, "")) {
@@ -49,8 +51,8 @@ has_github_pat <- function() !identical(Sys.getenv("GITHUB_PAT"), "")
 
 #' Show your rate limit of github api of the current session.
 #' 
-#' remaining requests / maximum number of requests (The time at which the current rate limit 
-#' widow resets)
+#' @return show message in format "remaining requests / maximum number of requests 
+#' (The time at which the current rate limit window resets)"
 
 rate_limit <- function() {
   resp <- github_GET(path = "rate_limit")

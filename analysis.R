@@ -11,29 +11,44 @@ for (file in list.files("R")) {
   source(file.path("R", file))
 }
 
-# total, issue, commnet1, comment2, comment3, url, html_url
-repo <- "rstudio/rmarkdown"
-Sys.setenv(GITHUB_PAT = "d6aa776aa44708d1d94c1aa85e987a2be0878d30")
-
-# issues
-issues <- github_repo_issues(repo)
-issues_number <- get_issues_item(issues, "number")
-
-# comments
-issues_comments <- purrr::map(issues_number,
-  github_issue_comments, repo = repo)
-issues_comments_ids <- purrr::map(issues_comments, get_issue_comments_item, "id") 
-
-# reactions
-issues_comments_reactions <- purrr::map(issues_comments_ids, 
-  github_issue_comments_reactions, repo = repo)
+Sys.setenv(GITHUB_PAT = "a181e0d1a7451a18c0bebcf3a0150c95416882e8")
 
 
-issues_reactions <- github_repo_issues_reactions(repo)
-comments_html <- map(issues_comments, get_issue_comments_item, "html_url")
-
-#默认情况设置参数：per_page = 100
-# ... 可以是哪些参数
+#system.time(repo_issues_reactions <- github_repo_issues_reactions("rstudio/blogdown"))
 
 
 # NB: progress bar, pagination
+
+# Requests that return multiple items will be paginated to 30 items by default.
+# https://developer.github.com/v3/#pagination
+repo <- "rstudio/rmarkdown"
+#issues
+issues <- github_repo_issues(repo)
+
+reactions <- github_repo_issues_reactions(repo, state = "open")
+
+# 46 issues, comment_count is the count of comments of issue
+issues_count <- reactions %>% dplyr::group_by(issue_number) %>% 
+  dplyr::summarise(n=n(), comment_count = n - 1L )
+
+# the most upvoted reactions comment 320504839 of issue 1020
+most_upvoted <- dplyr::filter(reactions, `+1` == max(`+1`))
+# we can view the details in the browser
+browseURL(file.path("https://github.com", repo, "issues", most_upvoted$path))
+# or extract the detials with github api
+github_GET(
+  file.path("repos", 
+    repo,
+    "issues/comments",
+    most_upvoted$comments_id
+  )
+)
+
+
+# # list comments of a  repository
+# 
+# resp <- github_GET(path = "repos/rstudio/rmarkdown/issues/comments",
+#   headers = c(Accept = "application/vnd.github.squirrel-girl-preview"),
+#   per_page = 100
+# )
+
