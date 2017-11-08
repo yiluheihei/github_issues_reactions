@@ -1,0 +1,14 @@
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
+dplyr
+purrr
+httr
+stringr
+jsonlite
+bindrcpp
+knitr

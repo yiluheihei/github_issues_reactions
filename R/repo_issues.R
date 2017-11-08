@@ -21,7 +21,3 @@ github_repo_issues <- function(repo, pull_request = FALSE, per_page = 100, ...) 
   
   parsed
 }
-
-# get_issues_item <- function(issues, item) {
-#   purrr::map(issues, item)
-# }

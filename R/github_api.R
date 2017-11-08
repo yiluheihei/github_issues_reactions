@@ -16,18 +16,6 @@ github_GET <- function(path, headers = NULL, ..., access_token = github_pat()) {
   return(resp)
 }
 
-
-
-# github_GET <- function(path, ..., access_token = github_pat()) {
-#   host <- "https://api.github.com"
-#   params <- list(access_token = access_token, ...)
-#   # resp <- httr::GET(host, path = path, ..., access_token = access_token)
-#   resp <- httr::GET(host, path = path, query = params)
-#   github_errors(resp)
-#   
-#   return(resp)
-# }
-
 # authorize and rate limit ------------------------------------------------
 
 #' Github personal access token (PAT), OAuth2 Token, which can be used to 
@@ -40,8 +28,12 @@ github_GET <- function(path, headers = NULL, ..., access_token = github_pat()) {
 github_pat <- function() {
   pat <- Sys.getenv('GITHUB_PAT')
   if (identical(pat, "")) {
-    stop("Please set env var GITHUB_PAT to your github personal access token",
-      call. = FALSE)
+    warning(paste("GitHub only allows 60 API calls per hour, please set env", 
+      "GITHUB_PAT to your PAT to increase rate limit to 5000 per hour.", 
+      sep = " "),
+      call. = FALSE
+    )
+    return(NULL)
   }
   
   pat

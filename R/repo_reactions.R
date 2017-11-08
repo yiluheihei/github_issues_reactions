@@ -1,4 +1,30 @@
-github_issue_reactions <- function(repo, pull_request = FALSE, per_page = 100, ...) {
+#' List reactions of github issues, also including the issue comments reactions.
+#' 
+#' @param repo character, in the format `username/repo`
+#' @param pull_request every pull request is an issue, and we discard the pull 
+#' request by default.
+#' @param per_page set the page size to the maximum 100 for auto pagination
+#' @param ... name-value pairs giving repository issues parameters, 
+#' e.g. `state`, more details in 
+#' [https://developer.github.com/v3/issues/#list-issues-for-a-repository](https://developer.github.com/v3/issues/#list-issues-for-a-repository)
+#' @return a tibble with 11 variables. Each row represents an issue reactions 
+#' (while `type` is "issue"), or a comment reactions of an issue (while `type` is
+#' "comment").
+#' `total_count`: total reactions
+#' `+1`: emoji `:+1:`
+#' `-1`: emoji `:-1:`
+#' `laugh`: emoji `:smile:`
+#' `hooray`: emoji `:tada:`
+#' `confused`: emoji `:confused:`
+#' `heart`: emoji `:heart`
+#' `id`: id of an issue or a comment
+#' `html_url`: html url, we can view he details of the issue or comment in our 
+#' browser `browseURL(html_url)`
+#' `issue_number`:  the number of the issue
+#' `type`: "issue" or "comment"
+#' and we can view he details of the issue or comment in our browser
+#' `browseURL(file.path("https://github.com", repo, "issues", path))` 
+github_repo_issue_reactions <- function(repo, pull_request = FALSE, per_page = 100, ...) {
   issues <- github_repo_issues(repo, pull_request, per_page, ...)
   issues_reactions <- purrr::map(issues, get_reactions) %>% dplyr::bind_rows()
   issues_meta <- purrr::map_df(issues, `[`, c("id", "html_url", "number")) %>% 
