@@ -29,7 +29,7 @@ for (file in list.files("R")) {
 
 ## Token
 
-As a default, GitHub only allows 60 API calls per hour for anonymous users, and the GITHUB_PAT environment variable is used.  I highly recommend to [Create your own pat](https://github.com/settings/tokens/new) and set env `GITHUB_PAT`， for increasing the unauthenticated rate limit for OAuth.
+As a default, GitHub only allows `60` API calls per hour for anonymous users, and the `GITHUB_PAT` environment variable is used.  I highly recommend to [Create your own pat](https://github.com/settings/tokens/new) and set env `GITHUB_PAT`， for increasing the unauthenticated rate limit to 5000 for OAuth.
 
 
 ```r
@@ -46,7 +46,7 @@ List reactions of an issue and its comment of a given repository:
 reactions <- github_repo_issue_reactions("rstudio/rmarkdown")
 ```
 
-There are 46 opened issues in "rstudio/ramrkdown", var `comment_count` indicates the count of comments of an issue
+There are 46 opened issues in `rstudio/ramrkdown`, var `comment_count` indicates the count of comments of an issue
 
 
 ```r
@@ -72,19 +72,27 @@ grouped_reactions
 ## # ... with 36 more rows
 ```
 
-As mentioned in the [blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/), the most upvoted reactions is comment 320504839 of issue 1020
+As mentioned in the [blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/), the most upvoted reactions is comment `320504839` of issue `1020`
 
 
 ```r
 most_upvoted <- dplyr::filter(reactions, `+1` == max(`+1`))
-most_upvoted
+str(most_upvoted)
 ```
 
 ```
-## # A tibble: 1 x 11
-##   total_count  `+1`  `-1` laugh hoor… conf… heart     id html… issu… type 
-##         <int> <int> <int> <int> <int> <int> <int>  <int> <chr> <int> <chr>
-## 1          26    26     0     0     0     0     0 3.21e⁸ http…  1020 comm…
+## Classes 'tbl_df', 'tbl' and 'data.frame':	1 obs. of  11 variables:
+##  $ total_count : int 26
+##  $ +1          : int 26
+##  $ -1          : int 0
+##  $ laugh       : int 0
+##  $ hooray      : int 0
+##  $ confused    : int 0
+##  $ heart       : int 0
+##  $ id          : int 320504839
+##  $ html_url    : chr "https://github.com/rstudio/rmarkdown/issues/1020#issuecomment-320504839"
+##  $ issue_number: int 1020
+##  $ type        : chr "comment"
 ```
 
 ```r
@@ -94,10 +102,10 @@ browseURL(most_upvoted$html_url)
 
 # Pagination
 
-Requests that return multiple items will be paginated to 30 items by default. 
+Requests that return multiple items will be paginated to `30` items by default. 
 
-**Note:** While we set the page size to the maximum 100 for auto pagination, and seek to not overstep your rate limit (5000 request per hour, because the 
-GITHUB_PAT is setted as token). You probably want to use a custom pattern for traversing large lists.
+**Note:** While we set the page size to the maximum `100` for auto pagination, and seek to not overstep your rate limit (5000 request per hour, once the 
+GITHUB_PAT is setted as your personal token).
 
 # gh: GitHub API client in R
 

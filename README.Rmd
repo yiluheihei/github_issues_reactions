@@ -20,7 +20,7 @@ for (file in list.files("R")) {
 
 ## Token
 
-As a default, GitHub only allows 60 API calls per hour for anonymous users, and the GITHUB_PAT environment variable is used.  I highly recommend to [Create your own pat](https://github.com/settings/tokens/new) and set env `GITHUB_PAT`， for increasing the unauthenticated rate limit for OAuth.
+As a default, GitHub only allows `60` API calls per hour for anonymous users, and the `GITHUB_PAT` environment variable is used.  I highly recommend to [Create your own pat](https://github.com/settings/tokens/new) and set env `GITHUB_PAT`， for increasing the unauthenticated rate limit to 5000 for OAuth.
 
 ```{r, eval=FALSE}
 Sys.setenv(GITHUB_PAT = "your_pat")
@@ -35,7 +35,7 @@ List reactions of an issue and its comment of a given repository:
 reactions <- github_repo_issue_reactions("rstudio/rmarkdown")
 ```
 
-There are 46 opened issues in "rstudio/ramrkdown", var `comment_count` indicates the count of comments of an issue
+There are 46 opened issues in `rstudio/ramrkdown`, var `comment_count` indicates the count of comments of an issue
 
 ```{r issue_summary}
 grouped_reactions <- dplyr::group_by(reactions, issue_number) %>% 
@@ -43,21 +43,21 @@ grouped_reactions <- dplyr::group_by(reactions, issue_number) %>%
 grouped_reactions
 ```
 
-As mentioned in the [blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/), the most upvoted reactions is comment 320504839 of issue 1020
+As mentioned in the [blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/), the most upvoted reactions is comment `320504839` of issue `1020`
 
 ```{r most_upvoted}
 most_upvoted <- dplyr::filter(reactions, `+1` == max(`+1`))
-most_upvoted
+str(most_upvoted)
 # we can view the details in the browser
 browseURL(most_upvoted$html_url)
 ```
 
 # Pagination
 
-Requests that return multiple items will be paginated to 30 items by default. 
+Requests that return multiple items will be paginated to `30` items by default. 
 
-**Note:** While we set the page size to the maximum 100 for auto pagination, and seek to not overstep your rate limit (5000 request per hour, because the 
-GITHUB_PAT is setted as token). You probably want to use a custom pattern for traversing large lists.
+**Note:** While we set the page size to the maximum `100` for auto pagination, and seek to not overstep your rate limit (5000 request per hour, once the 
+GITHUB_PAT is setted as your personal token).
 
 # gh: GitHub API client in R
 
