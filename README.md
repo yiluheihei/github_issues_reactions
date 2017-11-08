@@ -1,4 +1,4 @@
-Code for list reactions for issues of a reposity. Just for a [Yihui's blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/).
+Code for list reactions for issues of a reposity. Inspired from the [Yihui's blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/).
 
 ## Loading dependencies
 
