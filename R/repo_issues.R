@@ -16,7 +16,10 @@ github_repo_issues <- function(repo, pull_request = FALSE, per_page = 100, ...) 
   parsed <- github_pagination(resp)
 
   # discard pull request
-  purrr::discard(parsed, ~ is.element("pull_request", names(.x)))
+  if (!pull_request)
+    parsed <- purrr::discard(parsed, ~ is.element("pull_request", names(.x)))
+  
+  parsed
 }
 
 # get_issues_item <- function(issues, item) {

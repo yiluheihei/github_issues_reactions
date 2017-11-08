@@ -1,12 +1,12 @@
 github_issue_reactions <- function(repo, pull_request = FALSE, per_page = 100, ...) {
-  issues <- github_repo_issues(repo, pull_request, per_page, ...)
+  issues <- github_repo_issues(repo)
   issues_reactions <- purrr::map(issues, get_reactions) %>% dplyr::bind_rows()
   issues_meta <- purrr::map_df(issues, `[`, c("id", "html_url", "number")) %>% 
     dplyr::rename(issue_number = number)
   issues_reactions <- dplyr::bind_cols(issues_reactions, issues_meta) %>% 
     dplyr::mutate(type = "issue")
   
-  comments <- github_repo_comments(repo, pull_request, per_page)
+  comments <- github_repo_comments(repo)
   # keep comments in consistent with issues
   issues_url <- purrr::map_chr(issues, "url")
   comments <- purrr::keep(comments, ~ .x$issue_url %in% issues_url)

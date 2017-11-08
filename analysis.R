@@ -11,7 +11,7 @@ for (file in list.files("R")) {
   source(file.path("R", file))
 }
 
-Sys.setenv(GITHUB_PAT = "cd808ea9b081bdeb612b99ffe551c2d664394ca5")
+Sys.setenv(GITHUB_PAT = "a65388f9db8cf809b776666b23c32fbee1c9b564")
 
 
 #system.time(repo_issues_reactions <- github_repo_issues_reactions("rstudio/blogdown"))
