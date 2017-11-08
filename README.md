@@ -1,7 +1,5 @@
 Code for list reactions for issues of a reposity. Just for a [Yihui's blog post](https://yihui.name/en/2017/10/emoji-stats-of-github-issues/).
 
-# Quick start
-
 ## Loading dependencies
 
 
@@ -100,20 +98,20 @@ str(most_upvoted)
 browseURL(most_upvoted$html_url)
 ```
 
-# Pagination
+## Pagination
 
 Requests that return multiple items will be paginated to `30` items by default. 
 
 **Note:** While we set the page size to the maximum `100` for auto pagination, and seek to not overstep your rate limit (5000 request per hour, once the 
 GITHUB_PAT is setted as your personal token).
 
-# gh: GitHub API client in R
+## gh: GitHub API client in R
 
 Unfortunately，the [gh](https://github.com/r-lib/gh) package, a minimalistic GitHub API client in R, came into my eyes just after finish these codes. 
 
-Maybe I'll rewrite my codes rely on gh for the lowlevel stuff later.
+If necessary I'll rewrite my codes rely on gh for the lowlevel stuff later.
 
-# References
+## References
 
 - [https://rpubs.com/marbel/19179](https://rpubs.com/marbel/19179)
 - The [vignette](https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html) of httr
