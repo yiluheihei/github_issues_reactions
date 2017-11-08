@@ -11,7 +11,7 @@ for (file in list.files("R")) {
   source(file.path("R", file))
 }
 
-Sys.setenv(GITHUB_PAT = "a181e0d1a7451a18c0bebcf3a0150c95416882e8")
+Sys.setenv(GITHUB_PAT = "cd808ea9b081bdeb612b99ffe551c2d664394ca5")
 
 
 #system.time(repo_issues_reactions <- github_repo_issues_reactions("rstudio/blogdown"))
@@ -22,14 +22,12 @@ Sys.setenv(GITHUB_PAT = "a181e0d1a7451a18c0bebcf3a0150c95416882e8")
 # Requests that return multiple items will be paginated to 30 items by default.
 # https://developer.github.com/v3/#pagination
 repo <- "rstudio/rmarkdown"
-#issues
-issues <- github_repo_issues(repo)
 
-reactions <- github_repo_issues_reactions(repo, state = "open")
-
-# 46 issues, comment_count is the count of comments of issue
-issues_count <- reactions %>% dplyr::group_by(issue_number) %>% 
-  dplyr::summarise(n=n(), comment_count = n - 1L )
+# reactions <- github_repo_issues_reactions(repo, state = "all")
+# 
+# # 46 issues, comment_count is the count of comments of issue
+# issues_count <- reactions %>% dplyr::group_by(issue_number) %>% 
+#   dplyr::summarise(n=n(), comment_count = n - 1L )
 
 # the most upvoted reactions comment 320504839 of issue 1020
 most_upvoted <- dplyr::filter(reactions, `+1` == max(`+1`))

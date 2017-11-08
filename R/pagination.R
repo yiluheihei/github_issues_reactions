@@ -18,7 +18,10 @@ github_next_page <- function(resp, access_token = github_pat()) {
   if (!has_next_link(resp))
     return(NULL)
   next_link <- parse_links(resp)["next"]
-  resp <- httr::GET(next_link, access_token = access_token)
+  resp <- httr::GET(next_link, 
+    access_token = access_token, 
+    httr::add_headers(Accept = "application/vnd.github.squirrel-girl-preview")
+  )
   github_errors(resp)
   
   return(resp)
